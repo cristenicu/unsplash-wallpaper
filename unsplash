@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Set wallpaper"
+
+# rm /home/$USER/.unsplash/*
+mkdir -p /home/$USER/.unsplash
+
+if [ -n "$1" ]
+then
+	url=https://source.unsplash.com/1920x1080/?$1
+else
+	url=https://source.unsplash.com/1920x1080
+fi
+
+# get the image
+randomTmp="$(date | md5sum)"
+random=${randomTmp:0:10}
+echo $random
+
+wget -O "/home/$USER/.unsplash/wallpaper-$random.jpg" -A jpg $url
+
+# set the wallpaper
+gsettings set org.gnome.desktop.background draw-background false && gsettings set org.gnome.desktop.background picture-uri file:///home/$USER/.unsplash/wallpaper-$random.jpg && gsettings set org.gnome.desktop.background draw-background true
